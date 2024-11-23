@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figlet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 1.2em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        pre {
+            font-family: Consolas, "Courier New", monospace; /* Consolas 설정 */
+            font-size: 1.5em;
+            background-color: #282c34;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            padding: 10px 15px;
+            font-size: 1em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Figlet 글씨 만들기</h1>
+        <p>영어, 특수문자만 입력</p>
+        <input type="text" id="input-text" placeholder="텍스트를 입력하세요">
+        <button onclick="generateFigletText()">생성</button>
+        <pre id="output"></pre>
+        <button class="copy-btn" id="copy-btn" onclick="copyText()">복사</button>
+    </div>
+
+    <!-- 로컬로 저장한 figlet.js 파일 불러오기 -->
+    <script src="js/figlet.js"></script>
+
+    <!-- 사용자 스크립트 -->
+    <script>
+        function generateFigletText() {
+            const inputText = document.getElementById('input-text').value;
+            const output = document.getElementById('output');
+
+            if (inputText.trim() === "") {
+                output.textContent = "텍스트를 입력해주세요.";
+                return;
+            }
+
+            // figlet.text() 호출
+            figlet.text(inputText, {
+                font: 'Standard', // 기본 폰트
+                horizontalLayout: 'default',
+                verticalLayout: 'default'
+            }, function(err, result) {
+                if (err) {
+                    output.textContent = "오류가 발생했습니다.";
+                    return;
+                }
+                output.textContent = result;
+            });
+        }
+
+        // 복사 버튼 기능
+        function copyText() {
+            const output = document.getElementById('output');
+            const textToCopy = output.textContent;
+
+            if (textToCopy.trim() === "") {
+                alert("복사할 내용이 없습니다.");
+                return;
+            }
+
+            // 클립보드에 텍스트 복사
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    alert("복사되었습니다!");
+                })
+                .catch((err) => {
+                    alert("복사 실패: " + err);
+                });
+        }
+    </script>
+</body>
+</html>
